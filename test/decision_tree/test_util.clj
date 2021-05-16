@@ -16,3 +16,4 @@
               {:day 5 :weather "Rainy" :just-ate "no" :late-at-work "no" :will-go-running "yes"}
               {:day 6 :weather "Sunny" :just-ate "yes" :late-at-work "no" :will-go-running "yes"}
               {:day 7 :weather "Rainy" :just-ate "no" :late-at-work "yes":will-go-running "no"}])
+

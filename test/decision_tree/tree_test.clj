@@ -66,3 +66,4 @@
             {"Sunny" "yes",
              "Rainy" [:late-at-work {"yes" "no", "no" [:just-ate {"no" "no"}]}]}]
            dataset)))))
+

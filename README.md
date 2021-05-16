@@ -1,6 +1,34 @@
 # decision-tree
 
-A Clojure library designed to ... well, that part is up to you.
+Build decision trees natively in Clojure. The library was designed to
+be maximally flexible in terms of creating functional outputs. One
+goal is to ensure that node splits do not have to be based upon keys
+but can be arbitrary functions.
+
+Datasets should look like:
+
+```
+[{:day 1 :weather "Sunny" :just-ate "yes" :late-at-work "no" :will-go-running "yes"}
+ {:day 2 :weather "Rainy" :just-ate "yes" :late-at-work "yes" :will-go-running "no"}
+ {:day 3 :weather "Sunny" :just-ate "no" :late-at-work "yes" :will-go-running "yes"}
+ {:day 4 :weather "Rainy" :just-ate "no" :late-at-work "no" :will-go-running "no"}
+ {:day 5 :weather "Rainy" :just-ate "no" :late-at-work "no" :will-go-running "yes"}
+ {:day 6 :weather "Sunny" :just-ate "yes" :late-at-work "no" :will-go-running "yes"}
+ {:day 7 :weather "Rainy" :just-ate "no" :late-at-work "yes":will-go-running "no"}]
+```
+
+Trees look like:
+
+```
+[:weather
+ {"Sunny" [:late-at-work
+           {"yes" [:just-ate
+                   {"no" "no"
+                    "yes" "no"}]
+            "no" [:just-ate {"no" "no"
+                             "yes" "no"}]}]
+  "Rainy" "no"}]
+```
 
 ## Usage
 
@@ -10,13 +38,4 @@ FIXME
 
 Copyright © 2021 FIXME
 
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
-
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.
+Licensed under Apache v2
