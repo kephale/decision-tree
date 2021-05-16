@@ -2,7 +2,41 @@
   (:require [decision-tree.math :as dtm]
             [clj-random.core :as random]))
 
-;; We consider a decision tree to be a set of predicates that split nodes into discrete sets
+;; A decision tree is represented recursively as terminals or [fn {fn-output1 tree1 fn-output2 tree2}]
+
+(defn tree-unroller
+  "Function to unroll a tree so they are comparable."
+  [tree]
+  (tree-seq #(or (vector? %)
+                 (map? %))
+            identity tree))
+
+(defn compare-trees
+  "Compare two trees to test if they are the same."
+  [a b]
+  (every? identity
+          (map = 
+               (tree-unroller a)
+               (tree-unroller b))))
+
+(defn apply-tree
+  "Apply a tree to a given input."
+  [t in]
+  (if (vector? t)
+    (let [split-fn (first t)
+          split-val (split-fn in)
+          branch-map (second t)
+          outcome (get branch-map split-val)]
+      (apply-tree outcome in))
+    t))
+
+(defn compare-tree-output
+  "Compare two trees to test if they are the same."
+  [a b coll]
+  (let [a-out (map #(apply-tree a %) coll)
+        b-out (map #(apply-tree b %) coll)]
+    (every? identity
+            (map = a-out b-out))))                 
 
 (defn most-informative
   "Return the most informative function w.r.t. a given collection"
@@ -24,8 +58,10 @@
       (if (zero? ent)
         (target-f (first coll))
         (let [f (most-informative target-f fs coll)
-              next-fs (disj fs f)]
-          [f (mapv (fn [part]
-                     (fit-decision-tree target-f next-fs part))
-                   (vals (group-by f coll)))])))))
+              next-fs (disj fs f)
+              m (group-by f coll)]
+          [f (zipmap (keys m)
+                     (mapv (fn [part]
+                             (fit-decision-tree target-f next-fs part))
+                           (vals m)))])))))
 
